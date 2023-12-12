@@ -1,0 +1,26 @@
+---
+- name: building a idempotent playbook that installs python
+  #hosts: fry
+  #connection: ansible.builtin.ssh   # same as "ssh" which is default
+  hosts: localhost
+  connection: ansible.builtin.local
+  gather_facts: no
+  
+  tasks:
+
+  - name: ensure python is installed
+    block:
+       - name: check python version
+         ansible.builtin.raw: "python3 --version"
+         changed_when: false  # now it is never yellow
+         failed_when: false   # now it is never red
+         register: results
+
+       #- ansible.builtin.debug:
+       #    var: results
+
+       - name: install python
+         raw: "apt install python3-pip -y"
+         become: yes
+         when: results.rc != 0
+
