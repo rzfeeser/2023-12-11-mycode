@@ -1,0 +1,20 @@
+---
+- name: reach out and touch paloalto fw device
+  gather_facts: no             # this must be set to no because our connection is local and we'll just learn about ourselves
+  hosts: localhost
+  connection: local            # this is what instructs ansible to talk through the pythonSDK pan-os-python and pan-python
+
+  vars_files:
+    - ~/panos.creds            # contains a dictionary of connection info- documentation in ansible-doc for any panos modules or on doc site
+
+  tasks:
+    - name: collect facts on paloalto firewall device
+      paloaltonetworks.panos.panos_facts:
+        provider: '{{ item }}'             # dict of connection info taken from our vars_files
+        gather_subset: ['config']              # collect only this "slice" of info
+      register: results                        # store everything into a var called "results"
+      loop: "{{ provider }}"
+
+    - name: display what we got
+      ansible.builtin.debug:
+        var: results                           # display to the screen what was returned

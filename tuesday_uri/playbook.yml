@@ -15,6 +15,8 @@
       ansible.builtin.debug:
         var: results.json.people[1].name
         #var: results.json.people
+        verbosity: 1  # -v
+
 
     - name: display everyones name
       ansible.builtin.debug:

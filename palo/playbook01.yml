@@ -1,0 +1,22 @@
+---
+- name: reach out and touch paloalto fw device
+  gather_facts: no
+  hosts: localhost
+  connection: local 
+
+
+
+  vars_files:
+    - ~/panos.creds
+
+
+  tasks:
+    - name: collect facts on paloalto firewall device
+      paloaltonetworks.panos.panos_facts:
+        provider: '{{ provider }}'
+        gather_subset: ['config']
+      register: results
+
+    - name: display what we got
+      ansible.builtin.debug:
+        var: results 
