@@ -1,0 +1,15 @@
+---
+- name: reach out and touch paloalto fw device
+  gather_facts: no             # this must be set to no because our connection is local and we'll just learn about ourselves
+  hosts: panetwork
+  connection: local            # this is what instructs ansible to talk through the pythonSDK pan-os-python and pan-python
+
+    #roles:
+    #  - pa_prechecks
+    #
+
+  tasks:
+    - name: run pa_prechecks
+      ansible.builtin.import_role:
+        name: pa_prechecks
+      when: ansible_host == 'panos01'

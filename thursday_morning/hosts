@@ -1,0 +1,16 @@
+---
+all:
+  children:
+     panetwork:        # group name
+       hosts:          # hosts that belong to our group
+         panos01:
+           provider:   # host variable mapped to host panos01
+              username: admin
+              password: alta3izGr8! 
+              ip_address: 10.0.242.25
+         panos02:
+           provider:   # host variable mapped to host panos02
+              username: admin
+              password: alta3izGr8! 
+              ip_address: 10.7.129.84
+

@@ -1,0 +1,35 @@
+---
+# tasks file for pa_prechecks
+- name: PRECHECK block
+  block:
+
+  - name: collect facts on paloalto firewall device
+    paloaltonetworks.panos.panos_facts:
+      provider: '{{ provider }}'             # dict of connection info taken from our vars_files
+      #gather_subset: ['config']              # collect only this "slice" of info
+    register: results                        # store everything into a var called "results"
+
+  - name: display what we got
+    ansible.builtin.debug:
+      var: results                           # display to the screen what was returned
+
+  - debug:
+      var: ansible_net_model
+
+  - name: ensure netmodel matches
+    assert:
+      that: ansible_net_model == "PA-VM"
+
+
+  - name: ensure ha status is set to standalone
+    assert:
+      that: ansible_net_ha_localmode == "standalone"
+
+  - name: test ansible_net_version begins with '10.2'
+    assert:
+      that: ansible_net_version|regex_search('^10\.2\.') == '10.2.'
+      #that: ansible_net_version == '10.2.5.vm_eval'
+
+  - name: test ansible_net_version using a python string method 
+    assert:
+      that: ansible_net_version.split('.')[0] == '10' and ansible_net_version.split('.')[1] == '2'   # ['10', '2', '5', 'vm_eval']
